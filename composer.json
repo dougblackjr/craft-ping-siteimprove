@@ -1,0 +1,43 @@
+{
+    "name": "triplenerdscore/craft-ping-siteimprove",
+    "description": "Pings Siteimprove with this URL",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "craft ping siteimprove"
+    ],
+    "support": {
+        "docs": "https://github.com/dougblackjr/craft-ping-siteimprove/blob/master/README.md",
+        "issues": "https://github.com/dougblackjr/craft-ping-siteimprove/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "tripleNERDscore",
+            "homepage": "triplenerdscore.net"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "autoload": {
+        "psr-4": {
+          "triplenerdscore\\craftpingsiteimprove\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Craft Ping Siteimprove",
+        "handle": "craft-ping-siteimprove",
+        "hasCpSettings": false,
+        "hasCpSection": true,
+        "changelogUrl": "https://raw.githubusercontent.com/dougblackjr/craft-ping-siteimprove/master/CHANGELOG.md",
+        "components": {
+            "siteImprove": "triplenerdscore\\craftpingsiteimprove\\services\\SiteImprove"
+        },
+        "class": "triplenerdscore\\craftpingsiteimprove\\CraftPingSiteimprove"
+    }
+}
