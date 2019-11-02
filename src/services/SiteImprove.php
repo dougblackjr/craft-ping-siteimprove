@@ -14,6 +14,7 @@ use triplenerdscore\craftpingsiteimprove\CraftPingSiteimprove;
 
 use Craft;
 use craft\base\Component;
+use GuzzleHttp\Client;
 
 /**
  * SiteImprove Service
@@ -30,23 +31,135 @@ use craft\base\Component;
  */
 class SiteImprove extends Component
 {
-    // Public Methods
-    // =========================================================================
 
-    /**
-     * This function can literally be anything you want, and you can have as many service
-     * functions as you want
-     *
-     * From any other plugin file, call it like this:
-     *
-     *     CraftPingSiteimprove::$plugin->siteImprove->exampleService()
-     *
-     * @return mixed
-     */
-    public function exampleService()
+    private const BASE_URL = 'https://my2.siteimprove.com';
+
+    private const TOKEN_REQUEST_URI = '/auth/token';
+
+    // site_id - Id for specific site
+    // url - Url of the page
+    private const CONTENT_CHECK_URI = '/sites/{site_id}/content/check/page';
+
+    // site_id - Id for specific site
+    private const SITE_CRAWL_URI = '/sites/{site_id}/content/crawl';
+
+    public $token;
+
+    public $headers = [
+        'Accept' => 'application/json',
+    ];
+
+    private $client;
+
+    public function __construct() {
+
+        $this->client = new Client(['base_uri' => self::BASE_URL]);
+
+        $response = $this->client->get(self::TOKEN_REQUEST_URI, [
+            'headers' => $this->headers,
+            'http_errors' => false,
+        ]);
+
+        $statusCode = $response->getStatusCode();
+        
+        $data = json_decode($response->getBody(), true);
+
+        if($statusCode == 200){
+
+            return $data['data'];
+
+        }
+
+        $this->token = $json->token;
+
+    }
+
+    // CraftPingSiteimprove::$plugin->siteImprove->exampleService()
+    public function ping($site, $url)
     {
-        $result = 'something';
 
-        return $result;
+        $uri = str_replace('{site_id}', $site, self::CONTENT_CHECK_URI);
+
+        $response = $this->client->post(
+            $uri,
+            [
+                'site_id'   => $site,
+                'url'       => $url,
+            ],
+            [
+                'headers' => $this->headers,
+                'http_errors' => false,
+            ]
+        );
+
+        $statusCode = $response->getStatusCode();
+        
+        $data = json_decode($response->getBody(), true);
+
+        if($statusCode == 200){
+
+            return $data['data'];
+
+        }
+
+        return false;
+    }
+
+    public function crawlSite($site)
+    {
+
+        $uri = str_replace('{site_id}', $site, self::SITE_CRAWL_URI);
+
+        $response = $this->client->post(
+            $uri,
+            [
+                'site_id'   => $site,
+                'url'       => $url,
+            ],
+            [
+                'headers' => $this->headers,
+                'http_errors' => false,
+            ]
+        );
+
+        $statusCode = $response->getStatusCode();
+        
+        $data = json_decode($response->getBody(), true);
+
+        if($statusCode == 200){
+
+            return $data['data'];
+
+        }
+
+        return false;
+
+    }
+
+    public function crawlStatus($site)
+    {
+
+        $uri = str_replace('{site_id}', $site, self::SITE_CRAWL_URI);
+
+        $response = $this->client->gett(
+            $uri,
+            [
+                'headers' => $this->headers,
+                'http_errors' => false,
+            ]
+        );
+
+        $statusCode = $response->getStatusCode();
+        
+        $data = json_decode($response->getBody(), true);
+
+        if($statusCode == 200){
+
+            return $data['data'];
+
+        }
+
+        return false;
+
     }
 }
