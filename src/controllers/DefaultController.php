@@ -75,7 +75,7 @@ class DefaultController extends Controller
 
         return $this->returnJson(
                     [
-                        'result'=> $result,
+                        'result' => $result,
                     ]
                 );
 

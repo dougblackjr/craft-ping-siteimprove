@@ -159,7 +159,10 @@ class CraftPingSiteimprove extends Plugin
         $ajax = <<<AJAX
 const cpsi = document.getElementById("craft-ping-site-improve")
 
-cpsi.addEventListener('click', function() {
+cpsi.addEventListener('click', function(event) {
+
+    event.preventDefault();
+
     let url = cpsi.dataSet.href;
 
     cpsi.innerHTML = 'Submitting...';
