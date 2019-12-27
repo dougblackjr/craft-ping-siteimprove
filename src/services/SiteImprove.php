@@ -74,7 +74,6 @@ class SiteImprove extends Component
 
     }
 
-    // CraftPingSiteimprove::$plugin->siteImprove->exampleService()
     public function ping($site, $url)
     {
 

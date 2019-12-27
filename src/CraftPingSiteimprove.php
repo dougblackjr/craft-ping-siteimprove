@@ -11,6 +11,7 @@
 namespace triplenerdscore\craftpingsiteimprove;
 
 use triplenerdscore\craftpingsiteimprove\services\SiteImprove as SiteImproveService;
+use triplenerdscore\craftpingsiteimprove\models\Settings;
 
 use Craft;
 use craft\base\Plugin;
@@ -88,6 +89,15 @@ class CraftPingSiteimprove extends Plugin
             }
         );
 
+        Craft::$app->getView()->hook('cp.entries.edit.details', function(array &$context) {
+            /** @var EntryModel $entry **/
+            $entry = $context['entry'];
+
+            $url = $entry->url;
+
+            return '<a id="craft-ping-site-improve" data-href="' . $url . '" class="btn">Ping SiteImprove</a><script>' . $this->buildAjax() . '</script>';
+        });
+
 /**
  * Logging in Craft involves using one of the following methods:
  *
@@ -118,5 +128,57 @@ class CraftPingSiteimprove extends Plugin
 
     // Protected Methods
     // =========================================================================
+    /**
+     * Creates and returns the model used to store the plugin’s settings.
+     *
+     * @return \craft\base\Model|null
+     */
+    protected function createSettingsModel()
+    {
+        return new Settings();
+    }
+
+    /**
+     * Returns the rendered settings HTML, which will be inserted into the content
+     * block on the settings page.
+     *
+     * @return string The rendered settings HTML
+     */
+    protected function settingsHtml(): string
+    {
+        return Craft::$app->view->renderTemplate(
+            'craft-ping-siteimprove/settings',
+            [
+                'settings' => $this->getSettings()
+            ]
+        );
+    }
+
+    protected function buildAjax($url) {
+
+        $ajax = <<<AJAX
+const cpsi = document.getElementById("craft-ping-site-improve")
+
+cpsi.addEventListener('click', function() {
+    let url = cpsi.dataSet.href;
+
+    cpsi.innerHTML = 'Submitting...';
+
+    const xhr = new XMLHttpRequest();
+
+    var params = new FormData();
+    params.append('url', url);
+
+    xhr.open('POST', '/craftpingsiteimprove/defaultcontroller');
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        console.log(this.responseText);
+        cpsi.innerHTML = 'Sent!';
+        cpsi.disabled = true;
+    };
+    xhr.send(params);
+})
+AJAX;
+    }
 
 }
