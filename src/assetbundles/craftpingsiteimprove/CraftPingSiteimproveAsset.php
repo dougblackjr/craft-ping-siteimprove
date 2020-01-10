@@ -2,20 +2,20 @@
 /**
  * Craft Ping Siteimprove plugin for Craft CMS 3.x
  *
- * Pings Siteimprove with this URL
+ * adsads
  *
- * @link      triplenerdscore.net
- * @copyright Copyright (c) 2019 tripleNERDscore
+ * @link      https://triplenerdscore.net
+ * @copyright Copyright (c) 2020 tripleNERDscore
  */
 
-namespace triplenerdscore\craftpingsiteimprove\assetbundles\siteimprovecpsection;
+namespace triplenerdscore\craftpingsiteimprove\assetbundles\CraftPingSiteimprove;
 
 use Craft;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 
 /**
- * SiteImproveCPSectionAsset AssetBundle
+ * CraftPingSiteimproveAsset AssetBundle
  *
  * AssetBundle represents a collection of asset files, such as CSS, JS, images.
  *
@@ -32,7 +32,7 @@ use craft\web\assets\cp\CpAsset;
  * @package   CraftPingSiteimprove
  * @since     1.0.0
  */
-class SiteImproveCPSectionAsset extends AssetBundle
+class CraftPingSiteimproveAsset extends AssetBundle
 {
     // Public Methods
     // =========================================================================
@@ -43,7 +43,7 @@ class SiteImproveCPSectionAsset extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = "@triplenerdscore/craftpingsiteimprove/assetbundles/siteimprovecpsection/dist";
+        $this->sourcePath = "@triplenerdscore/craftpingsiteimprove/assetbundles/craftpingsiteimprove/dist";
 
         // define the dependencies
         $this->depends = [
@@ -53,11 +53,11 @@ class SiteImproveCPSectionAsset extends AssetBundle
         // define the relative path to CSS/JS files that should be registered with the page
         // when this asset bundle is registered
         $this->js = [
-            'js/SiteImprove.js',
+            'js/CraftPingSiteimprove.js',
         ];
 
         $this->css = [
-            'css/SiteImprove.css',
+            'css/CraftPingSiteimprove.css',
         ];
 
         parent::init();

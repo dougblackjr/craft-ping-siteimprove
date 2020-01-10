@@ -39,7 +39,7 @@ class Settings extends Model
      *
      * @var string
      */
-    public $siteId = 'site_id';
+    public $siteId = '';
     public $useCSRF = true;
 
     // Public Methods
