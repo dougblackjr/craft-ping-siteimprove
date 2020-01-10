@@ -146,7 +146,7 @@ class CraftPingSiteimprove extends Plugin
      */
     protected function settingsHtml(): string
     {
-        return Craft::$app->view->renderTemplate(
+        return Craft::$app->getView()->renderTemplate(
             'craft-ping-siteimprove/settings',
             [
                 'settings' => $this->getSettings()
