@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2019 tripleNERDscore
  */
 
-namespace \craftpingsiteimprove\controllers;
+namespace triplenerdscore\craftpingsiteimprove\controllers;
 
 use \craftpingsiteimprove\CraftPingSiteimprove;
 
@@ -47,7 +47,7 @@ class DefaultController extends Controller
      *         The actions must be in 'kebab-case'
      * @access protected
      */
-    protected $allowAnonymous = ['index'];
+    protected $allowAnonymous = ['action-index'];
 
     // Public Methods
     // =========================================================================
@@ -60,6 +60,8 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
+
+        return 'kopdkopas';
 
         $this->requireAjaxRequest();
 

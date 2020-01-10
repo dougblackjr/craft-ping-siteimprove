@@ -95,7 +95,7 @@ class CraftPingSiteimprove extends Plugin
 
             $url = $entry->url;
 
-            return '<a id="craft-ping-site-improve" data-href="' . $url . '" class="btn">Ping SiteImprove</a><script>' . $this->buildAjax() . '</script>';
+            return '<a id="craft-ping-site-improve" data-href="' . $url . '" class="btn">Ping SiteImprove</a><script>' . $this->buildAjax($url) . '</script>';
         });
 
 /**
@@ -163,7 +163,11 @@ cpsi.addEventListener('click', function(event) {
 
     event.preventDefault();
 
-    let url = cpsi.dataSet.href;
+    let url = cpsi.dataset.href,
+        csrfName = window.Craft.csrfTokenName
+        csrfToken = window.Craft.csrfTokenValue;
+
+    console.log('url', url)
 
     cpsi.innerHTML = 'Submitting...';
 
@@ -171,17 +175,19 @@ cpsi.addEventListener('click', function(event) {
 
     var params = new FormData();
     params.append('url', url);
+    params.append(csrfName, csrfToken);
 
-    xhr.open('POST', '/craftpingsiteimprove/defaultcontroller');
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.open('POST', '/actions/craft-ping-siteimprove/default');
     xhr.onload = function () {
         console.log(this.responseText);
         cpsi.innerHTML = 'Sent!';
         cpsi.disabled = true;
     };
-    xhr.send(params);
+    xhr.send((params));
 })
 AJAX;
+
+    return $ajax;
     }
 
 }
