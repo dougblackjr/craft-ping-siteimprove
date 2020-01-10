@@ -1,0 +1,36 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Craft Ping Siteimprove plugin for Craft CMS 3.x
+ *
+ * Craft Ping Siteimprove index.twig
+ *
+ * @author    tripleNERDscore
+ * @copyright Copyright (c) 2019 tripleNERDscore
+ * @link      triplenerdscore.net
+ * @package   CraftPingSiteimprove
+ * @since     1.0.0
+ */
+#}
+
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("triplenerdscore\\craftpingsiteimprove\\assetbundles\\craftpingsiteimprove\\CraftPingSiteimproveAsset") %}
+
+{# Link for the ? icon at the bottom of the page #}
+{% set docsUrl = "https://github.com/dougblackjr/craft-ping-siteimprove/blob/master/README.md" %}
+
+{# The title of this CP section #}
+{% set title = "Craft Ping Siteimprove" %}
+
+{# The URL to this plugin's base CP section #}
+{% set pluginCpUrl = url('craft-ping-siteimprove') %}
+
+{{ forms.textField({
+    label: 'Site ID',
+    instructions: 'Your website SiteImprove Site ID',
+    id: 'siteId',
+    name: 'siteId',
+    value: settings['siteId']})
+}}
