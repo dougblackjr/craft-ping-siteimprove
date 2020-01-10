@@ -64,13 +64,13 @@ class SiteImprove extends Component
         
         $data = json_decode($response->getBody(), true);
 
-        if($statusCode == 200){
+        if($statusCode != 200){
 
             return $data['data'];
 
         }
 
-        $this->token = $json->token;
+        $this->token = $data['token'];
 
     }
 
@@ -84,6 +84,7 @@ class SiteImprove extends Component
             [
                 'site_id'   => $site,
                 'url'       => $url,
+                'token'     => $this->token,
             ],
             [
                 'headers' => $this->headers,

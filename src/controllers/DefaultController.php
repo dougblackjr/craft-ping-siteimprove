@@ -61,17 +61,14 @@ class DefaultController extends Controller
     public function actionIndex()
     {
 
-        return 'kopdkopas';
-
-        $this->requireAjaxRequest();
-
         $service = new SiteImprove();
 
         // Get URL from POST request
         $request = Craft::$app->getRequest();
+
         $url = $request->getParam('url');
 
-        $siteId = $foo = \triplenerdscore\craftpingsiteimprove\CraftPingSiteimprove::getInstance()->getSettings()->siteId;
+        $siteId = \triplenerdscore\craftpingsiteimprove\CraftPingSiteimprove::getInstance()->getSettings()->siteId;
 
         $result = $service->ping($siteId, $url);
 
