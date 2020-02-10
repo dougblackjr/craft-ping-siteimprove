@@ -27,6 +27,14 @@
 {% set pluginCpUrl = url('craft-ping-siteimprove') %}
 
 {{ forms.textField({
+    label: 'API Key',
+    instructions: 'Your SiteImprove API key',
+    id: 'apiKey',
+    name: 'apiKey',
+    value: settings['apiKey']})
+}}
+
+{{ forms.textField({
     label: 'Site ID',
     instructions: 'Your website SiteImprove Site ID',
     id: 'siteId',

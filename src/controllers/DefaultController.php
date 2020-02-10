@@ -68,6 +68,8 @@ class DefaultController extends Controller
 
         $url = $request->getParam('url');
 
+        $apiKey = \triplenerdscore\craftpingsiteimprove\CraftPingSiteimprove::getInstance()->getSettings()->apiKey;
+
         $siteId = \triplenerdscore\craftpingsiteimprove\CraftPingSiteimprove::getInstance()->getSettings()->siteId;
 
         $result = $service->ping($siteId, $url);

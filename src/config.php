@@ -24,6 +24,7 @@
 
 return [
 
+	'apiKey'	=> '',
 	'siteId'	=> '',
 	'useCSRF'	=> false,
 

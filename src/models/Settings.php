@@ -39,6 +39,7 @@ class Settings extends Model
      *
      * @var string
      */
+    public $apiKey = '';
     public $siteId = '';
     public $useCSRF = true;
 
@@ -58,6 +59,9 @@ class Settings extends Model
     public function rules()
     {
         return [
+            [
+                'apiKey', 'string'
+            ],
             [
                 'siteId', 'string'
             ],

@@ -95,7 +95,9 @@ class CraftPingSiteimprove extends Plugin
 
             $url = $entry->url;
 
-            return '<a id="craft-ping-site-improve" data-href="' . $url . '" class="btn">Ping SiteImprove</a><script>' . $this->buildAjax($url) . '</script>';
+            $string = '<div class="meta"><div class="data"><h5 class="heading">Ping Site Improve</h5><a id="craft-ping-site-improve" data-href="' . $url . '" class="btn">Ping</a><script>' . $this->buildAjax($url) . '</script></div></div>';
+
+            return $string;
         });
 
 /**
@@ -162,6 +164,8 @@ const cpsi = document.getElementById("craft-ping-site-improve")
 cpsi.addEventListener('click', function(event) {
 
     event.preventDefault();
+
+    if(cpsi.disabled) return false;
 
     let url = cpsi.dataset.href,
         csrfName = window.Craft.csrfTokenName
