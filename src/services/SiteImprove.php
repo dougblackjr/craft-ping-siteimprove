@@ -15,6 +15,8 @@ use triplenerdscore\craftpingsiteimprove\CraftPingSiteimprove;
 use Craft;
 use craft\base\Component;
 use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 
 /**
  * SiteImprove Service
@@ -32,18 +34,26 @@ use GuzzleHttp\Client;
 class SiteImprove extends Component
 {
 
-    private const BASE_URL = 'https://my2.siteimprove.com';
+    private const BASE_URL = 'https://api.siteimprove.com';
 
-    private const TOKEN_REQUEST_URI = '/auth/token';
+    private const TOKEN_REQUEST_URI = '/v2/auth/token';
 
     // site_id - Id for specific site
     // url - Url of the page
-    private const CONTENT_CHECK_URI = '/sites/{site_id}/content/check/page';
+    private const CONTENT_CHECK_URI = '/v2/sites/{site_id}/content/check/page';
 
     // site_id - Id for specific site
-    private const SITE_CRAWL_URI = '/sites/{site_id}/content/crawl';
+    private const SITE_CRAWL_URI = '/v2/sites/{site_id}/content/crawl';
 
     public $token;
+    public $userId;
+    public $apiKey;
+
+    protected $container;
+        
+    protected $history;
+    
+    protected $stack;
 
     public $headers = [
         'Accept' => 'application/json',
@@ -53,24 +63,24 @@ class SiteImprove extends Component
 
     public function __construct() {
 
-        $this->client = new Client(['base_uri' => self::BASE_URL]);
+        $this->container = [];
 
-        $response = $this->client->get(self::TOKEN_REQUEST_URI, [
-            'headers' => $this->headers,
-            'http_errors' => false,
-        ]);
+        $this->history = Middleware::history($this->container);
 
-        $statusCode = $response->getStatusCode();
+        $this->stack = HandlerStack::create();
         
-        $data = json_decode($response->getBody(), true);
+        // Add the history middleware to the handler stack.
+        $this->stack->push($this->history);
 
-        if($statusCode != 200){
+        $this->client = new Client(
+            [
+                'base_uri'  => self::BASE_URL,
+                'handler'   => $this->stack,
+            ]
+        );
 
-            return $data['data'];
-
-        }
-
-        $this->token = $data['token'];
+        $this->userId = \triplenerdscore\craftpingsiteimprove\CraftPingSiteimprove::getInstance()->getSettings()->userName;
+        $this->apiKey = \triplenerdscore\craftpingsiteimprove\CraftPingSiteimprove::getInstance()->getSettings()->apiKey;
 
     }
 
@@ -79,30 +89,37 @@ class SiteImprove extends Component
 
         $uri = str_replace('{site_id}', $site, self::CONTENT_CHECK_URI);
 
-        $response = $this->client->post(
-            $uri,
-            [
-                'site_id'   => $site,
-                'url'       => $url,
-                'token'     => $this->token,
-            ],
-            [
-                'headers' => $this->headers,
-                'http_errors' => false,
-            ]
-        );
+        try {
+            $response = $this->client->post(
+                "{$uri}?url={$url}",
+                [
+                    'json'  => [
+                        'site_id'   => $site,
+                        'url'       => $url,
+                    ],
+                    'headers' => $this->headers,
+                    'http_errors' => false,
+                    'auth'  => [ $this->userId, $this->apiKey ]
+                ]
+            );
+        } catch (\ErrorException $e) {
+            return [
+                'success'   => false,
+                'error'     => $e->getMessage(),
+            ];
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            return [
+                'success'   => false,
+                'error'     => $e->getMessage(),
+            ];
+        }
 
         $statusCode = $response->getStatusCode();
         
         $data = json_decode($response->getBody(), true);
 
-        if($statusCode == 200){
+        return $data;
 
-            return $data['data'];
-
-        }
-
-        return false;
     }
 
     public function crawlSite($site)
@@ -119,6 +136,7 @@ class SiteImprove extends Component
             [
                 'headers' => $this->headers,
                 'http_errors' => false,
+                'auth'  => [ $this->userId, $this->apiKey ],
             ]
         );
 
@@ -126,13 +144,7 @@ class SiteImprove extends Component
         
         $data = json_decode($response->getBody(), true);
 
-        if($statusCode == 200){
-
-            return $data['data'];
-
-        }
-
-        return false;
+        return $statusCode == 200;
 
     }
 
@@ -146,6 +158,7 @@ class SiteImprove extends Component
             [
                 'headers' => $this->headers,
                 'http_errors' => false,
+                'auth'  => [ $this->userId, $this->apiKey ],
             ]
         );
 
@@ -153,13 +166,8 @@ class SiteImprove extends Component
         
         $data = json_decode($response->getBody(), true);
 
-        if($statusCode == 200){
-
-            return $data['data'];
-
-        }
-
-        return false;
+        return $statusCode == 200;
 
     }
+
 }

@@ -24,6 +24,7 @@
 
 return [
 
+	'userName'	=> '',
 	'apiKey'	=> '',
 	'siteId'	=> '',
 	'useCSRF'	=> false,

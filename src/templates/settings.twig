@@ -35,6 +35,14 @@
 }}
 
 {{ forms.textField({
+    label: 'Username',
+    instructions: 'Your SiteImprove user name',
+    id: 'userName',
+    name: 'userName',
+    value: settings['userName']})
+}}
+
+{{ forms.textField({
     label: 'Site ID',
     instructions: 'Your website SiteImprove Site ID',
     id: 'siteId',

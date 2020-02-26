@@ -171,8 +171,6 @@ cpsi.addEventListener('click', function(event) {
         csrfName = window.Craft.csrfTokenName
         csrfToken = window.Craft.csrfTokenValue;
 
-    console.log('url', url)
-
     cpsi.innerHTML = 'Submitting...';
 
     const xhr = new XMLHttpRequest();
@@ -183,9 +181,17 @@ cpsi.addEventListener('click', function(event) {
 
     xhr.open('POST', '/actions/craft-ping-siteimprove/default');
     xhr.onload = function () {
-        console.log(this.responseText);
-        cpsi.innerHTML = 'Sent!';
-        cpsi.disabled = true;
+        // console.log(this.responseText);
+        var r = JSON.parse(this.responseText);
+        r = r.result;
+        if(r.success) {
+            cpsi.innerHTML = 'Sent!';
+            cpsi.disabled = true;
+        } else {
+            cpsi.innerHTML = r ? r.message : 'There was an Error';
+            console.log('SITEIMPROVE ERROR: ', this.responseText);
+            cpsi.disabled = false;
+        }
     };
     xhr.send((params));
 })
